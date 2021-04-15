@@ -299,13 +299,21 @@ class MOY():
         R_u, R_v = self.seg_to_reg[delta_segment]
         square_A = self.A[:,[i for i in range(self.n_regions) if i != R_u and i != R_v]]
         
-
         return square_A.det()/self.abs_delta
     
     def get_alexander_invariant(self, delta_segment = 0, left_region_index = 0):
         ss = self.get_state_sum(delta_segment, left_region_index)
         denum = (self.t**(-1/2)- self.t**(1/2))**(len(self.vs) - 1)
         return ss/denum
+
+    def get_square_A(self, delta_segment = 0, left_region_index = 0):
+        n = left_region_index
+        self.abs_delta = self.t**(n - self.seg_to_col[delta_segment]) - self.t**(n)  
+        
+        # now delete the two columns and compute the deretminant
+        R_u, R_v = self.seg_to_reg[delta_segment]
+        square_A = self.A[:,[i for i in range(self.n_regions) if i != R_u and i != R_v]]
+        return square_A
                 
     # get the m_Cp contribution of a vertex to a region
     # given the type of vertex and the relative location of the region
